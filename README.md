@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #  Entertainment Tracker Web App
 
 Welcome to the **Entertainment Tracker Web App**!  
@@ -42,8 +41,12 @@ This is a sleek, cute, and functional app for keeping track of your Anime, Movie
 ## 📸 Screenshots
 
 ![Full Screen](assets/Full_Page.png)
+
+
 ![Anime List](assets/Anime_list.png)
-![Checklist + Progress bar](assets/Checklist_+_Progress_bar)
+
+
+![Checklist + Progress bar](assets/Checklist_+_Progress_bar.png)
 
 ---
 
@@ -80,6 +83,3 @@ Inspired by the joy of tracking stories we adore 📚🎥🎴
 This project is open-source and free to use for personal & educational purposes.
 
 
-=======
-# my-entertainment-tracker
->>>>>>> 4a288f5d2180ae937c8ef9f6ac747c73276b621a
