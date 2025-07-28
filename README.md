@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #  Entertainment Tracker Web App
 
 Welcome to the **Entertainment Tracker Web App**!  
@@ -79,3 +80,6 @@ Inspired by the joy of tracking stories we adore 📚🎥🎴
 This project is open-source and free to use for personal & educational purposes.
 
 
+=======
+# my-entertainment-tracker
+>>>>>>> 4a288f5d2180ae937c8ef9f6ac747c73276b621a
