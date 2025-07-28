@@ -1,0 +1,210 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+  background-color: #fdfaff;
+  padding: 20px;
+}
+
+header h1 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+nav button {
+  margin: 0 10px;
+  padding: 8px 16px;
+  border: none;
+  background-color: #dcd6f7;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+nav button:hover {
+  background-color: #bdb2ff;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+  margin: auto;
+  margin-bottom: 30px;
+}
+
+form input, form button {
+  padding: 10px;
+  border: 1px solid #aaa;
+  border-radius: 8px;
+}
+
+#episodesContainer input {
+  margin-top: 5px;
+}
+
+#itemList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 16px;
+  width: 320px;
+  background: #ffffff;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.card h3 {
+  margin: 5px 0;
+  font-size: 1.2em;
+}
+
+.card p {
+  margin: 4px 0;
+  color: #555;
+  font-size: 0.9em;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background-color: #eee;
+  border-radius: 5px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #8b5cf6;
+  width: 0;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+/* 🪄 Checklist area (hidden by default) */
+.episode-checklist {
+  margin-top: 10px;
+  display: none;
+  max-height: 500px;
+  overflow-y: auto;
+  border-top: 1px dashed #aaa;
+  padding-top: 8px;
+}
+
+.card.active .episode-checklist {
+  display: block;
+}
+.toggle-btn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  font-size: 0.85em;
+  border: none;
+  background-color: #eee;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background-color: #ccc;
+}
+/* 🌟 Beautify checkboxes */
+.episode-checklist input[type="checkbox"] {
+  display: none;
+}
+
+.episode-checklist label {
+  display: inline-block;
+  position: relative;
+  padding-left: 30px;
+  margin: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+/* ⬜ Default box */
+.episode-checklist label::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #bbb;
+  border-radius: 4px;
+  background: #fff;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+/* ✅ Checked state */
+.episode-checklist input[type="checkbox"]:checked + label::before {
+  background: #8b5cf6; /* Soft violet */
+  border-color: #6c3df4;
+}
+
+/* ✔️ Checkmark */
+.episode-checklist label::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 5px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  opacity: 0;
+  transform: rotate(45deg);
+  transition: opacity 0.2s ease;
+}
+
+/* ✨ Show checkmark */
+.episode-checklist input[type="checkbox"]:checked + label::after {
+  opacity: 1;
+}
+/* 🔮 Glow on hover */
+.episode-checklist label:hover::before {
+  border-color: #a78bfa;
+  box-shadow: 0 0 3px #c4b5fd;
+}
+
+/* 💚 Change label color if checked */
+.episode-checklist input[type="checkbox"]:checked + label {
+  color: #6c3df4;
+  font-weight: 500;
+}

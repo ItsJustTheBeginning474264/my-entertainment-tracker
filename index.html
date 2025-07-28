@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎥 My Entertainment Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <h1>📺 My Entertainment Tracker</h1>
+    <nav>
+      <button onclick="switchSection('anime')">Anime</button>
+      <button onclick="switchSection('movies')">Movies</button>
+      <button onclick="switchSection('series')">Series</button>
+      <button onclick="switchSection('novels')">Novels</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Form to add new item -->
+    <section id="form-section">
+      <h2>Add New <span id="section-name">Anime</span></h2>
+      <form id="itemForm">
+        <input type="text" id="itemTitle" placeholder="Title" required />
+        <input type="text" id="itemGenre" placeholder="Genre" required />
+        <input type="number" id="seasonCount" placeholder="Number of Seasons" min="1" required />
+        
+        <div id="episodesContainer"></div>
+
+        <input type="file" id="itemImage" accept="image/*" />
+        <button type="submit">Add</button>
+      </form>
+    </section>
+
+    <!-- Display cards -->
+    <section id="card-section">
+      <h2><span id="card-title">Anime</span> List</h2>
+      <div id="itemList"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
