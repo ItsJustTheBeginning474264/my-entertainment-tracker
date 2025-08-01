@@ -1,4 +1,4 @@
-#  Entertainment Tracker Web App
+#  Entertainment Tracker Web App    
 
 Welcome to the **Entertainment Tracker Web App**!  
 This is a sleek, cute, and functional app for keeping track of your Anime, Movies, Series, and Books — complete with episode/chapter tracking, beautiful progress bars, and support for multiple sections!
