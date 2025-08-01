@@ -1,37 +1,54 @@
+/* === Base Reset === */
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', sans-serif;
 }
 
 body {
-  background-color: #fdfaff;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f4fa;
+  color: #333;
   padding: 20px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* === Header === */
+header {
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 header h1 {
-  text-align: center;
-  margin-bottom: 20px;
+  font-size: 2.2rem;
+  color: #4c1d95;
 }
 
-nav {
-  text-align: center;
-  margin-bottom: 20px;
+.section-buttons {
+  margin-top: 10px;
 }
 
-nav button {
-  margin: 0 10px;
-  padding: 8px 16px;
+.section-buttons button {
+  padding: 8px 14px;
+  margin: 5px;
   border: none;
-  background-color: #dcd6f7;
-  border-radius: 8px;
+  border-radius: 20px;
+  background: #ddd6fe;
+  color: #4c1d95;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: background 0.2s ease;
 }
 
-nav button:hover {
-  background-color: #bdb2ff;
+.section-buttons button:hover {
+  background: #c4b5fd;
+}
+
+/* === Form Section === */
+.form-section {
+  text-align: center;
+  margin-bottom: 40px;
 }
 
 form {
@@ -39,172 +56,210 @@ form {
   flex-direction: column;
   gap: 10px;
   max-width: 400px;
-  margin: auto;
-  margin-bottom: 30px;
+  margin: 0 auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-form input, form button {
+form input[type="text"],
+form input[type="number"],
+form input[type="file"] {
   padding: 10px;
-  border: 1px solid #aaa;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+form button {
+  background: #4c1d95;
+  color: #fff;
+  border: none;
   border-radius: 8px;
+  padding: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease;
 }
 
-#episodesContainer input {
-  margin-top: 5px;
+form button:hover {
+  background: #6d28d9;
 }
 
-#itemList {
+/* === Card Grid === */
+.card-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
   justify-content: center;
 }
 
+/* === Card === */
 .card {
-  border: 1px solid #ddd;
+  background: white;
+  border-radius: 12px;
   padding: 15px;
-  border-radius: 16px;
-  width: 320px;
-  background: #ffffff;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  overflow: hidden;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   position: relative;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+  overflow: visible;
+  transition: 0.3s ease;
 }
 
 .card img {
   width: 100%;
   height: 180px;
   object-fit: cover;
-  border-radius: 12px;
-  margin-bottom: 10px;
+  object-position: center;
+  border-radius: 8px;
 }
 
+
 .card h3 {
-  margin: 5px 0;
-  font-size: 1.2em;
+  margin: 10px 0 4px;
 }
 
 .card p {
-  margin: 4px 0;
-  color: #555;
-  font-size: 0.9em;
+  font-size: 14px;
+  margin-bottom: 6px;
 }
 
+/* === Progress Bar === */
 .progress-bar-container {
-  width: 100%;
-  height: 10px;
-  background-color: #eee;
+  background: #eee;
   border-radius: 5px;
-  margin: 8px 0;
+  height: 10px;
   overflow: hidden;
+  margin: 5px 0;
 }
 
 .progress-bar {
+  background: #a5b4fc;
   height: 100%;
-  background-color: #8b5cf6;
-  width: 0;
-  border-radius: 5px;
   transition: width 0.3s ease;
 }
 
-/* 🪄 Checklist area (hidden by default) */
-.episode-checklist {
+/* === Button Group === */
+.button-group {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
   margin-top: 10px;
-  display: none;
-  max-height: 500px;
-  overflow-y: auto;
-  border-top: 1px dashed #aaa;
-  padding-top: 8px;
+  justify-content: space-between;
 }
 
-.card.active .episode-checklist {
-  display: block;
-}
-.toggle-btn {
-  margin-top: 10px;
-  padding: 6px 12px;
-  font-size: 0.85em;
+.button-group button {
+  flex: 1 1 auto;
+  padding: 4px 8px;
+  font-size: 11px;
   border: none;
-  background-color: #eee;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: 0.2s ease;
+  min-width: max-content;
 }
 
-.toggle-btn:hover {
-  background-color: #ccc;
+/* Matching edit + checklist styles */
+.toggle-btn,
+.edit-btn {
+  background-color: #ddd6fe;
+  color: #4c1d95;
 }
-/* 🌟 Beautify checkboxes */
-.episode-checklist input[type="checkbox"] {
+
+.toggle-btn:hover,
+.edit-btn:hover {
+  background-color: #c4b5fd;
+  transform: scale(1.02);
+}
+
+/* Delete button - red danger */
+.delete-btn {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.delete-btn:hover {
+  background-color: #fca5a5;
+  transform: scale(1.02);
+}
+
+/* === Checklist === */
+.episode-checklist {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.episode-checklist h4 {
+  margin: 8px 0 4px;
+  font-size: 14px;
+  color: #4c1d95;
+  text-decoration: underline;
+}
+
+.episode-checklist-season {
+  background: #f9f7ff;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* === Vertical Column Checklist === */
+.episode-grid {
+  column-count: 4;
+  column-gap: 20px;
+}
+
+.episode-grid div {
+  break-inside: avoid;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+/* Responsive column count */
+@media (max-width: 700px) {
+  .episode-grid {
+    column-count: 2;
+  }
+}
+/* --- File Input Styling --- */
+.file-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+input[type="file"] {
   display: none;
 }
 
-.episode-checklist label {
-  display: inline-block;
-  position: relative;
-  padding-left: 30px;
-  margin: 5px 10px;
-  cursor: pointer;
+.custom-file-label {
+  background-color: #4c1d95;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 16px;
   font-size: 14px;
-  user-select: none;
-  color: #333;
-  transition: color 0.2s ease;
-}
-
-/* ⬜ Default box */
-.episode-checklist label::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 2px;
-  width: 18px;
-  height: 18px;
-  border: 2px solid #bbb;
-  border-radius: 4px;
-  background: #fff;
-  transition: background 0.2s ease, border-color 0.2s ease;
-}
-
-/* ✅ Checked state */
-.episode-checklist input[type="checkbox"]:checked + label::before {
-  background: #8b5cf6; /* Soft violet */
-  border-color: #6c3df4;
-}
-
-/* ✔️ Checkmark */
-.episode-checklist label::after {
-  content: "";
-  position: absolute;
-  left: 7px;
-  top: 5px;
-  width: 6px;
-  height: 10px;
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  opacity: 0;
-  transform: rotate(45deg);
-  transition: opacity 0.2s ease;
-}
-
-/* ✨ Show checkmark */
-.episode-checklist input[type="checkbox"]:checked + label::after {
-  opacity: 1;
-}
-/* 🔮 Glow on hover */
-.episode-checklist label:hover::before {
-  border-color: #a78bfa;
-  box-shadow: 0 0 3px #c4b5fd;
-}
-
-/* 💚 Change label color if checked */
-.episode-checklist input[type="checkbox"]:checked + label {
-  color: #6c3df4;
   font-weight: 500;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: inline-block;
+}
+
+.custom-file-label:hover {
+  background-color: #6d28d9;
+}
+
+#file-name {
+  font-size: 13px;
+  color: #666;
+  font-style: italic;
 }

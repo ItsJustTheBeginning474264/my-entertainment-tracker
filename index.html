@@ -3,43 +3,54 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>🎥 My Entertainment Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>My Entertainment Tracker</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-
   <header>
     <h1>📺 My Entertainment Tracker</h1>
-    <nav>
+    <div class="section-buttons">
       <button onclick="switchSection('anime')">Anime</button>
-      <button onclick="switchSection('movies')">Movies</button>
       <button onclick="switchSection('series')">Series</button>
-      <button onclick="switchSection('novels')">Novels</button>
-    </nav>
+      <button onclick="switchSection('movie')">Movie</button>
+      <button onclick="switchSection('book')">Book</button>
+    </div>
+
   </header>
+  
 
-  <main>
-    <!-- Form to add new item -->
-    <section id="form-section">
-      <h2>Add New <span id="section-name">Anime</span></h2>
-      <form id="itemForm">
-        <input type="text" id="itemTitle" placeholder="Title" required />
-        <input type="text" id="itemGenre" placeholder="Genre" required />
-        <input type="number" id="seasonCount" placeholder="Number of Seasons" min="1" required />
-        
-        <div id="episodesContainer"></div>
-
+  <section class="form-section">
+    <h2 id="section-name">Anime</h2>
+    <form id="itemForm">
+      <input type="text" id="itemTitle" placeholder="Title" required />
+      <input type="text" id="itemGenre" placeholder="Genre" required />
+      <div class="file-input-wrapper">
+        <label for="itemImage" class="custom-file-label">📁 Upload Thumbnail</label>
         <input type="file" id="itemImage" accept="image/*" />
-        <button type="submit">Add</button>
-      </form>
-    </section>
+        <span id="file-name">No file chosen</span>
+      </div>
 
-    <!-- Display cards -->
-    <section id="card-section">
-      <h2><span id="card-title">Anime</span> List</h2>
-      <div id="itemList"></div>
-    </section>
-  </main>
+
+      <!-- Wrap season/episode stuff -->
+      <div id="seasonFields">
+        <input type="number" id="seasonCount" placeholder="Number of Seasons" />
+        <div id="episodesContainer"></div>
+      </div>
+
+      <!-- Chapter field for books only -->
+      <div id="chapterField" style="display: none;">
+        <input type="number" id="chapterCount" placeholder="Number of Chapters" />
+      </div>
+
+      <button type="submit">Save</button>
+    </form>
+
+  </section>
+
+  <section>
+    <h2 id="card-title">Anime List</h2>
+    <div id="itemList" class="card-container"></div>
+  </section>
 
   <script src="script.js"></script>
 </body>
