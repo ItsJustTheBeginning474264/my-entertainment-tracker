@@ -263,3 +263,48 @@ input[type="file"] {
   color: #666;
   font-style: italic;
 }
+#calendar {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Segoe UI", sans-serif;
+  transition: 0.3s ease-in-out;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 1.5rem;
+  color: #444;
+}
+
+.fc .fc-button {
+  background-color: #ff77aa;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  padding: 6px 12px;
+  margin: 0 4px;
+  transition: background-color 0.3s;
+}
+
+.fc .fc-button:hover {
+  background-color: #ff5599;
+}
+.toast {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: #333;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  opacity: 0.9;
+  z-index: 9999;
+  transition: all 0.3s ease-in-out;
+}
+.toast-success { background: #28a745; }
+.toast-danger { background: #dc3545; }
+.toast-info { background: #17a2b8; }

@@ -1,7 +1,7 @@
 let currentSection = "anime";
 let openCards = [];
 let editIndex = null;
-
+let calendar;
 function switchSection(section) {
   currentSection = section;
   document.getElementById("section-name").textContent = capitalize(section);
@@ -13,15 +13,12 @@ function switchSection(section) {
   const chapterField = document.getElementById("chapterField");
 
   if (section === "anime" || section === "series") {
-    // Show season & episode inputs
     seasonFields.style.display = "block";
     chapterField.style.display = "none";
   } else if (section === "book") {
-    // Show chapter input only
     seasonFields.style.display = "none";
     chapterField.style.display = "block";
   } else {
-    // Movie: hide everything
     seasonFields.style.display = "none";
     chapterField.style.display = "none";
   }
@@ -33,7 +30,6 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// Handle Season and Episode Inputs
 document.getElementById("seasonCount").addEventListener("input", function () {
   const container = document.getElementById("episodesContainer");
   container.innerHTML = "";
@@ -62,9 +58,7 @@ document.getElementById("itemForm").addEventListener("submit", function (e) {
   const file = fileInput.files[0];
   const episodesPerSeason = [];
 
-  episodeInputs.forEach(input => {
-    episodesPerSeason.push(parseInt(input.value));
-  });
+  episodeInputs.forEach(input => episodesPerSeason.push(parseInt(input.value)));
 
   const reader = new FileReader();
   reader.onload = function () {
@@ -82,16 +76,15 @@ document.getElementById("itemForm").addEventListener("submit", function (e) {
       newItem.episodesPerSeason = episodesPerSeason;
       newItem.watched = episodesPerSeason.map(count => Array(count).fill(false));
     } else if (currentSection === "book") {
+      const chapterCount = parseInt(document.getElementById("chapterCount").value) || 1;
       newItem.seasons = 1;
       newItem.episodesPerSeason = [chapterCount];
       newItem.watched = [Array(chapterCount).fill(false)];
     } else {
-      // Movie
       newItem.seasons = 1;
       newItem.episodesPerSeason = [1];
       newItem.watched = [[false]];
     }
-
 
     if (editIndex !== null) {
       const originalWatched = list[editIndex].watched;
@@ -126,9 +119,7 @@ function renderItemList() {
   list.forEach((item, index) => {
     const card = document.createElement("div");
     card.className = "card";
-    if (openCards.includes(index)) {
-      card.classList.add("active");
-    }
+    if (openCards.includes(index)) card.classList.add("active");
 
     const total = item.episodesPerSeason.reduce((a, b) => a + b, 0);
     const watchedCount = item.watched.flat().filter(Boolean).length;
@@ -143,9 +134,7 @@ function renderItemList() {
       </div>
       <p>${watchedCount}/${total} episodes watched (${progressPercent}%)</p>
       <div class="button-group">
-        <button class="toggle-btn" onclick="event.stopPropagation(); toggleChecklist(${index})">
-          ${openCards.includes(index) ? '❌ Close' : '📋 Open'} Checklist
-        </button>
+        <button class="toggle-btn" onclick="event.stopPropagation(); toggleChecklist(${index})">${openCards.includes(index) ? '❌ Close' : '📋 Open'} Checklist</button>
         <button class="edit-btn" onclick="editItem(${index})">✏️ Edit</button>
         <button class="delete-btn" onclick="deleteItem(${index})">🗑️ Delete</button>
       </div>
@@ -158,22 +147,18 @@ function renderItemList() {
       item.episodesPerSeason.forEach((count, seasonIndex) => {
         const seasonWrap = document.createElement("div");
         seasonWrap.className = "episode-checklist-season";
-
-        const seasonTitle = document.createElement("h4");
-        seasonTitle.innerText = `Season ${seasonIndex + 1}`;
+        seasonWrap.innerHTML = `<h4>Season ${seasonIndex + 1}</h4>`;
 
         const episodeGrid = document.createElement("div");
         episodeGrid.className = "episode-grid";
 
         for (let ep = 0; ep < count; ep++) {
           const checkboxId = `chk-${index}-${seasonIndex}-${ep}`;
-
           const checkbox = document.createElement("input");
           checkbox.type = "checkbox";
           checkbox.id = checkboxId;
           checkbox.checked = item.watched[seasonIndex][ep];
-          checkbox.onchange = () =>
-            toggleSmart(currentSection, index, seasonIndex, ep);
+          checkbox.onchange = () => toggleSmart(currentSection, index, seasonIndex, ep);
 
           const label = document.createElement("label");
           label.setAttribute("for", checkboxId);
@@ -182,11 +167,9 @@ function renderItemList() {
           const wrap = document.createElement("div");
           wrap.appendChild(checkbox);
           wrap.appendChild(label);
-
           episodeGrid.appendChild(wrap);
         }
 
-        seasonWrap.appendChild(seasonTitle);
         seasonWrap.appendChild(episodeGrid);
         checklistDiv.appendChild(seasonWrap);
       });
@@ -200,29 +183,73 @@ function renderItemList() {
 
 function toggleSmart(section, itemIndex, seasonIndex, epIndex) {
   const list = JSON.parse(localStorage.getItem(section));
-  const watchedArr = list[itemIndex].watched[seasonIndex];
+  const item = list[itemIndex];
+  const watchedArr = item.watched[seasonIndex];
   const isChecked = !watchedArr[epIndex];
 
   for (let i = 0; i < watchedArr.length; i++) {
     if (isChecked && i <= epIndex) {
-      watchedArr[i] = true;
+      if (!watchedArr[i]) {
+        watchedArr[i] = true;
+        logWatchedItem(item.title, section, `S${seasonIndex + 1}E${i + 1}`);
+      }
     } else if (!isChecked && i >= epIndex) {
-      watchedArr[i] = false;
+      if (watchedArr[i]) {
+        watchedArr[i] = false;
+        removeWatchedItem(item.title, section, `S${seasonIndex + 1}E${i + 1}`);
+      }
     }
   }
 
-  localStorage.setItem(section, JSON.stringify(list));
-  renderItemList();
+
+  function removeWatchedItem(title, type, epOrChapter) {
+  let log = JSON.parse(localStorage.getItem('watchedLog')) || [];
+
+  log = log.filter(entry => {
+    return !(
+      entry.title === title &&
+      entry.type === type &&
+      (entry.ep === epOrChapter || `Ch. ${entry.chapter}` === epOrChapter)
+    );
+  });
+
+  localStorage.setItem('watchedLog', JSON.stringify(log));
 }
 
-function toggleChecklist(index) {
-  const isOpen = openCards.includes(index);
-  if (isOpen) {
-    openCards = openCards.filter(i => i !== index);
-  } else {
-    openCards.push(index);
-  }
+
+  localStorage.setItem(section, JSON.stringify(list));
   renderItemList();
+  updateCalendar();
+}
+
+
+function logWatchedItem(title, type, epOrChapter) {
+  let log = JSON.parse(localStorage.getItem('watchedLog')) || [];
+
+  log.push({
+    title: title,
+    type: type,
+    ep: epOrChapter.includes("Ch") ? null : epOrChapter,
+    chapter: epOrChapter.includes("Ch") ? epOrChapter.split(" ")[1] : null,
+    date: new Date().toISOString().split("T")[0]
+  });
+
+  localStorage.setItem('watchedLog', JSON.stringify(log));
+}
+function updateCalendar() {
+  const events = getWatchedEventsFromLocalStorage();
+  calendar.removeAllEvents();
+  events.forEach(event => calendar.addEvent(event));
+}
+
+
+
+function getWatchedEventsFromLocalStorage() {
+  let log = JSON.parse(localStorage.getItem('watchedLog')) || [];
+  return log.map(entry => ({
+    title: `${entry.title} ${entry.ep || "Ch. " + entry.chapter}`,
+    start: entry.date
+  }));
 }
 
 function deleteItem(index) {
@@ -256,14 +283,38 @@ function editItem(index) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  switchSection("anime");
-  document.getElementById("itemImage").addEventListener("change", function () {
-  const fileName = this.files[0]?.name || "No file chosen";
-  document.getElementById("file-name").textContent = fileName;
+function toggleChecklist(index) {
+  const isOpen = openCards.includes(index);
+  openCards = isOpen ? openCards.filter(i => i !== index) : [...openCards, index];
+  renderItemList();
+}
+document.addEventListener('DOMContentLoaded', function () {
+  const calendarEl = document.getElementById('calendar');
+  if (calendarEl) {
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: getWatchedEventsFromLocalStorage()
+    });
+    calendar.render();
+  }
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  switchSection("anime");
+
+  document.getElementById("itemImage").addEventListener("change", function () {
+    const fileName = this.files[0]?.name || "No file chosen";
+    document.getElementById("file-name").textContent = fileName;
+  });
+
+  calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    events: getWatchedEventsFromLocalStorage()
+  });
+  calendar.render();
 });
+
+// 🌟 PWA Service Worker
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
     navigator.serviceWorker.register("service-worker.js")
