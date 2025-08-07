@@ -139,7 +139,15 @@ form button:hover {
 .progress-bar {
   background: #a5b4fc;
   height: 100%;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.progress-bar.completed {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.progress-bar.high-progress {
+  background: linear-gradient(90deg, #a5b4fc, #10b981);
 }
 
 /* === Button Group === */
