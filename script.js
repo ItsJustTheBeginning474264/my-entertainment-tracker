@@ -124,15 +124,23 @@ function renderItemList() {
     const total = item.episodesPerSeason.reduce((a, b) => a + b, 0);
     const watchedCount = item.watched.flat().filter(Boolean).length;
     const progressPercent = Math.round((watchedCount / total) * 100);
+    
+    // Determine progress bar class based on completion
+    let progressBarClass = 'progress-bar';
+    if (progressPercent === 100) {
+      progressBarClass += ' completed';
+    } else if (progressPercent >= 75) {
+      progressBarClass += ' high-progress';
+    }
 
     card.innerHTML = `
       <img src="${item.image || 'assets/default.jpg'}" alt="Thumbnail">
       <h3>${item.title}</h3>
       <p><strong>Genre:</strong> ${item.genre}</p>
       <div class="progress-bar-container">
-        <div class="progress-bar" style="width: ${progressPercent}%"></div>
+        <div class="${progressBarClass}" style="width: ${progressPercent}%"></div>
       </div>
-      <p>${watchedCount}/${total} episodes watched (${progressPercent}%)</p>
+      <p>${watchedCount}/${total} ${currentSection === 'book' ? 'chapters' : 'episodes'} watched (${progressPercent}%)</p>
       <div class="button-group">
         <button class="toggle-btn" onclick="event.stopPropagation(); toggleChecklist(${index})">${openCards.includes(index) ? '❌ Close' : '📋 Open'} Checklist</button>
         <button class="edit-btn" onclick="editItem(${index})">✏️ Edit</button>
@@ -162,7 +170,7 @@ function renderItemList() {
 
           const label = document.createElement("label");
           label.setAttribute("for", checkboxId);
-          label.textContent = `Ep ${ep + 1}`;
+          label.textContent = currentSection === 'book' ? `Ch ${ep + 1}` : `Ep ${ep + 1}`;
 
           const wrap = document.createElement("div");
           wrap.appendChild(checkbox);
@@ -181,28 +189,7 @@ function renderItemList() {
   });
 }
 
-function toggleSmart(section, itemIndex, seasonIndex, epIndex) {
-  const list = JSON.parse(localStorage.getItem(section));
-  const item = list[itemIndex];
-  const watchedArr = item.watched[seasonIndex];
-  const isChecked = !watchedArr[epIndex];
-
-  for (let i = 0; i < watchedArr.length; i++) {
-    if (isChecked && i <= epIndex) {
-      if (!watchedArr[i]) {
-        watchedArr[i] = true;
-        logWatchedItem(item.title, section, `S${seasonIndex + 1}E${i + 1}`);
-      }
-    } else if (!isChecked && i >= epIndex) {
-      if (watchedArr[i]) {
-        watchedArr[i] = false;
-        removeWatchedItem(item.title, section, `S${seasonIndex + 1}E${i + 1}`);
-      }
-    }
-  }
-
-
-  function removeWatchedItem(title, type, epOrChapter) {
+function removeWatchedItem(title, type, epOrChapter) {
   let log = JSON.parse(localStorage.getItem('watchedLog')) || [];
 
   log = log.filter(entry => {
@@ -216,6 +203,27 @@ function toggleSmart(section, itemIndex, seasonIndex, epIndex) {
   localStorage.setItem('watchedLog', JSON.stringify(log));
 }
 
+function toggleSmart(section, itemIndex, seasonIndex, epIndex) {
+  const list = JSON.parse(localStorage.getItem(section));
+  const item = list[itemIndex];
+  const watchedArr = item.watched[seasonIndex];
+  const isChecked = !watchedArr[epIndex];
+
+  for (let i = 0; i < watchedArr.length; i++) {
+    if (isChecked && i <= epIndex) {
+      if (!watchedArr[i]) {
+        watchedArr[i] = true;
+        const episodeLabel = section === 'book' ? `Ch. ${i + 1}` : `S${seasonIndex + 1}E${i + 1}`;
+        logWatchedItem(item.title, section, episodeLabel);
+      }
+    } else if (!isChecked && i >= epIndex) {
+      if (watchedArr[i]) {
+        watchedArr[i] = false;
+        const episodeLabel = section === 'book' ? `Ch. ${i + 1}` : `S${seasonIndex + 1}E${i + 1}`;
+        removeWatchedItem(item.title, section, episodeLabel);
+      }
+    }
+  }
 
   localStorage.setItem(section, JSON.stringify(list));
   renderItemList();
@@ -288,17 +296,6 @@ function toggleChecklist(index) {
   openCards = isOpen ? openCards.filter(i => i !== index) : [...openCards, index];
   renderItemList();
 }
-document.addEventListener('DOMContentLoaded', function () {
-  const calendarEl = document.getElementById('calendar');
-  if (calendarEl) {
-    const calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'dayGridMonth',
-      events: getWatchedEventsFromLocalStorage()
-    });
-    calendar.render();
-  }
-});
-
 document.addEventListener("DOMContentLoaded", () => {
   switchSection("anime");
 
@@ -307,11 +304,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("file-name").textContent = fileName;
   });
 
-  calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    events: getWatchedEventsFromLocalStorage()
-  });
-  calendar.render();
+  // Initialize calendar
+  const calendarEl = document.getElementById('calendar');
+  if (calendarEl) {
+    calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      events: getWatchedEventsFromLocalStorage()
+    });
+    calendar.render();
+  }
 });
 
 // 🌟 PWA Service Worker
